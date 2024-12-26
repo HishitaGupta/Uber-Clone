@@ -21,7 +21,7 @@ userControllers.loginUser)
 
 
 router.get("/profile",authUser,userControllers.getUserProfile)
-
+router.get("/logout",authUser,userControllers.logoutUser)
 
 
 
