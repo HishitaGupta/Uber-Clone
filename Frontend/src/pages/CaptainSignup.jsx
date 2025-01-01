@@ -1,30 +1,64 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { CaptainDataContext } from '../context/CaptainContext'
+import axios from 'axios'
 
 const CaptainSignUp = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
-  const [userData, setUserData] = useState({})
+  const [vehicleColor, setVehicleColor] = useState("")
+  const [vehiclePlate, setVehiclePlate] = useState("")
+  const [vehicleType, setVehicleType] = useState("")
+  const [vehicleCapacity, setVehicleCapacity] = useState("")
 
-  const onSubmitHandler = (e) => {
+
+  const { captain, setCaptain } = useContext(CaptainDataContext)
+
+  const navigate = useNavigate()
+
+  const onSubmitHandler = async(e) => {
     e.preventDefault()
 
-    setUserData({
-      fullName: {
-        firstName: firstName,
-        lastName: lastName
+    const captainData = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName
       },
 
       email: email,
       password: password,
-    })
+
+      vehicle: {
+        color: vehicleColor,
+        plate: vehiclePlate,
+        vehicleType: vehicleType,
+        capacity: vehicleCapacity
+      }
+    }
+    // console.log(captainData);
+    
+    const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/captains/register', captainData)
+
+    if(response.status===201){
+      const data = response.data
+      // console.log(response);
+      
+      setCaptain(data.captain)
+      localStorage.setItem('token',data.token)
+    
+      navigate('/captain-home')
+    }
     // console.log(userData);
     setFirstName("")
     setLastName("")
     setEmail("")
     setPassword("")
+    setVehicleCapacity("")
+    setVehicleColor("")
+    setVehiclePlate("")
+    setVehicleType("")
 
   }
 
@@ -60,8 +94,49 @@ const CaptainSignUp = () => {
           <h3 className='text-xl mb-2 '>Password</h3>
           <input type="password" required placeholder='******' className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base' onChange={(e) => (setPassword(e.target.value)
           )} value={password} />
+          <div className='flex gap-5'>
+            <div className='w-1/2'>
+              <h3 className='text-xl mb-2 '>Vehicle Color</h3>
+              <input className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base'
+                type="text" required placeholder=''
+                onChange={(e) => (setVehicleColor(e.target.value)
+                )} value={vehicleColor} /></div>
+            <div className='w-1/2'>
+              <h3 className='text-xl mb-2 '>Vehicle Plate</h3>
+              <input className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base'
+                type="text" required placeholder=''
+                onChange={(e) => (setVehiclePlate(e.target.value)
+                )} value={vehiclePlate} />
+            </div>
+          </div>
+
+          <div className='flex gap-5'>
+            <div className='w-1/2'>
+              <h3 className='text-xl mb-2 '>Vehicle Type</h3>
+              {/* <input className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base'
+                type="text" required placeholder=''
+                onChange={(e) => (setVehicleColor(e.target.value)
+                )} value={vehicleColor} /> */}
+
+              <select className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base' onChange={(e) => (setVehicleType(e.target.value))} defaultValue="car">
+                <option value="car">Car</option>
+                <option value="motorcycle">Motorcycle</option>
+                <option value="auto">Auto</option>
+              </select>
+            </div>
+            <div className='w-1/2'>
+              <h3 className='text-xl mb-2 '>Vehicle Capacity</h3>
+              <input className='bg-[#EEEE] rounded px-4 py-2 border mb-7 w-full text-lg placeholder:text-base'
+                type="number" required placeholder=''
+                onChange={(e) => (setVehicleCapacity(e.target.value)
+                )} value={vehicleCapacity} />
+            </div>
+          </div>
+
           <button className='bg-[#111] text-white font-semibold rounded px-4 py-2 border mb-7 w-full text-lg '>Sign Up</button>
           <p className='text-center mb-1'>Existing Captain? <Link to="/captain-login" className='text-blue-600'>Login here</Link></p>
+
+
         </form>
       </div>
       <div>
