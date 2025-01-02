@@ -17,7 +17,7 @@ module.exports.authUser=async(req,res,next)=>{
     }
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET)//decoded mein user ka id aayega
-        console.log(decoded);
+        // console.log(decoded);
         
         const user = await userModel.findById(decoded._id)
 
@@ -48,10 +48,12 @@ module.exports.authCaptain=async(req,res,next)=>{
 
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET)
-        // console.log(decoded);
+        // console.log("Decoded token of captain:",decoded);
         
         const captain = await captainModel.findById(decoded.id)
 
+        // console.log("Captain:",captain);
+        
        
         
 
