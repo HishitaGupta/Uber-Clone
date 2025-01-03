@@ -7,7 +7,7 @@ const crypto = require('crypto');
 async function getFare(pickup,destination){
 
     if(!pickup || !destination){
-        throw new error ('Pickup and Destination are required')
+        return('Pickup and Destination are required')
     };
 
     const distanceTime = await mapsService.getDistanceTime(pickup,destination);
@@ -27,6 +27,8 @@ async function getFare(pickup,destination){
 
     return fare;
 }
+
+module.exports.getFare=getFare;
 
 function generateOtp(num){
     const otp = crypto.randomInt(0, Math.pow(10, num)).toString().padStart(num, '0');

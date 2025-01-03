@@ -26,6 +26,9 @@ module.exports.getDistanceTime = async (origin,destination) => {
 
         const response = await axios.get(`https://maps.gomaps.pro/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${process.env.MAPS_API_KEY}`)
 
+        // console.log(response);
+        
+
         if(response.data.status === 'OK'){
             if(response.data.rows[0].elements[0].status === 'ZERO_RESULTS'){
                 throw new Error("No route found")}
