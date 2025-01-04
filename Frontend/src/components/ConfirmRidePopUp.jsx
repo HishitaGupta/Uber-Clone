@@ -19,7 +19,7 @@ const ConfirmRidePopUp = (props) => {
                         src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg"
                         alt=""
                     />
-                    <h2 className='text-lg font-medium capitalize'>{props.ride?.user.fullname.firstname}</h2>
+                    {/* <h2 className='text-lg font-medium capitalize'>{props.ride?.user.fullname.firstname}</h2> */}
                 </div>
                 <h5 className='text-lg font-semibold'>2.2 KM</h5>
             </div>

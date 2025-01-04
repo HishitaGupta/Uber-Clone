@@ -9,8 +9,14 @@ const mapsRoutes = require("./routes/maps.routes")
 const captainRoutes= require("./routes/captain.routes")
 const rideRoutes= require("./routes/ride.routes")
 const cookieParser = require("cookie-parser")
+const captainModel = require("./models/captain.model")
 
 connectToDb()
+
+// captainModel.createIndexes([
+//     { location: "2dsphere" }
+//   ]);
+  
 
 app.use(cors())
 app.use(express.json())

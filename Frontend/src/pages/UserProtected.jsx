@@ -7,7 +7,7 @@ import axios from 'axios'
 const UserProtected = ({children}) => {
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
-    const [user, setUser] = useContext(UserDataContext)
+    const {user, setUser}= useContext(UserDataContext)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -29,6 +29,8 @@ const UserProtected = ({children}) => {
                 
                 if (response.status === 200 && response.data!==null) {
                     setUser(response.data)
+                    console.log("User in context:",response.data);
+                    
                     setIsLoading(false)
                 } else {
                     localStorage.removeItem('token')

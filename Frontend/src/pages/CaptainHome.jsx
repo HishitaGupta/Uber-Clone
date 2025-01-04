@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CaptainDetails from '../components/CaptainDetails'
 import RidePopUp from '../components/RidePopUp'
@@ -6,6 +6,8 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { FiLogOut } from "react-icons/fi";
+import { CaptainDataContext } from '../context/CaptainContext'
+import { SocketContext } from '../context/SocketContext'
 
 const CaptainHome = () => {
     const [ridePopupPanel, setRidePopupPanel] = useState(false)
@@ -14,6 +16,63 @@ const CaptainHome = () => {
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
     const [ride, setRide] = useState(null)
+
+    const { socket,sendMessage,receiveMessage } = React.useContext(SocketContext)
+    const { captain } = React.useContext(CaptainDataContext)
+
+    useEffect(()=>{
+        console.log("IN home",captain);
+        sendMessage('join',{userType:"captain",userId:captain?._id})
+
+        const updateLocation = () => {
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(position=>
+                    socket.emit("update-location-captain",{
+                        userId:captain?._id,
+                        location:{
+                            type:"Point",
+                            coordinates:[position.coords.longitude,position.coords.latitude]
+                        }})
+                )
+            }
+        }
+
+        const interval = setInterval(updateLocation,10000)
+        updateLocation()
+
+        return () => clearInterval(interval)
+
+
+
+      },[])
+
+    //   useEffect(() => {
+    //     if (socket) {
+    //       receiveMessage("new-ride", (data) => {
+    //         console.log("New ride received:", data);
+    //         setRide(data);
+    //         setRidePopupPanel(true);
+    //       });
+    //     }
+    //   }, [socket, receiveMessage]);
+    
+    //   const onSubmitHandler = (e) => {
+    //     e.preventDefault();
+    //   };
+
+    useEffect(() => {
+        if (socket) {
+          console.log("Setting up socket listener for new-ride event");
+          receiveMessage("new-ride", (data) => {
+            console.log("New ride received:", data);
+            setRide(data);
+            setRidePopupPanel(true);
+          });
+        }
+      }, [socket, receiveMessage])
+
+
+    
 
     // Animation hooks for popups
     useGSAP(function () {

@@ -40,12 +40,14 @@ module.exports.loginCaptain=async(req,res,next)=>{
     try {
         const {email,password}=req.body
         const captain = await captainModel.findOne({email}).select("+password")
+        console.log(captain);
         if(!captain){
-            return res.status(401).json({error:"Invalid Email or Password"})
+            return res.status(401).json({error:"Invalid Email or Passwordcaptain not found"})
         }
         const isMatch = await captain.comparePassword(password)
-        if(!isMatch){
-            return res.status(401).json({error:"Invalid Email or Password"})
+        console.log(isMatch);
+        if(isMatch){
+            return res.status(401).json({error:"Invalid Email or Password password not matched"})
         }
         const token = captain.generateAuthToken()
         res.cookie("token",token)

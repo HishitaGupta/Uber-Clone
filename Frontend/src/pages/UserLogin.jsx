@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 const UserLogin = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [user,setUser]=useContext(UserDataContext)
+  const {user,setUser}=useContext(UserDataContext)
   const navigate = useNavigate()
 
   const onSubmitHandler =async(e)=>{
