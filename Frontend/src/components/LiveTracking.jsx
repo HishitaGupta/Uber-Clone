@@ -60,7 +60,12 @@ const LiveTracking = () => {
                 center={currentPosition}
                 zoom={15}
             >
-                <Marker position={currentPosition} />
+                <Marker 
+                    position={currentPosition} 
+                    icon={{
+                        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                    }}
+                />
             </GoogleMap>
         </LoadScript>
     )

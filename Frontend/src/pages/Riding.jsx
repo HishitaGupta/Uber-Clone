@@ -3,6 +3,7 @@ import { FaHome } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../context/UserContext'
 import { SocketContext } from '../context/SocketContext'
+import LiveTracking from '../components/LiveTracking'
 
 const Riding = () => {
     const navigate = useNavigate()
@@ -33,10 +34,11 @@ const Riding = () => {
                 <FaHome onClick={()=>(navigate("/home"))}/>
             </div>
             <div className='h-1/2 overflow-hidden'>
-                <img
+                {/* <img
                     src="https://preview.redd.it/15jedtrp9u631.png?width=640&crop=smart&auto=webp&s=0ea0b6faf591210f9ad56c0e4cbebe177a242557"
                     alt=""
-                    className="object-fit" />
+                    className="object" /> */}
+                    <LiveTracking/>
             </div>
             <div className='h-1/2 p-2'>
             <div className='w-full flex justify-between py-4'>

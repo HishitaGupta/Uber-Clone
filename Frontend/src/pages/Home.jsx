@@ -10,6 +10,7 @@ import WaitingForDriver from "../components/WaitingForDriver";
 import { UserDataContext } from "../context/UserContext";
 import {SocketContext} from "../context/SocketContext";
 import { useNavigate } from "react-router";
+import LiveTracking from "../components/LiveTracking";
 
 const Home = () => {
 
@@ -175,18 +176,19 @@ const Home = () => {
 
   return (
     <div className="relative flex flex-col h-screen justify-between overflow-hidden">
-      <div className="p-7 z-10">
+      <div className="absolute top-10 p-2 z-10">
         <img
           src="https://logospng.org/download/uber/logo-uber-4096.png"
           alt=""
           className="w-20"
         />
       </div>
-      <img
+      {/* <img
         src="https://preview.redd.it/15jedtrp9u631.png?width=640&crop=smart&auto=webp&s=0ea0b6faf591210f9ad56c0e4cbebe177a242557"
         alt=""
         className="w-full object-cover absolute h-screen inset-0"
-      />
+      /> */}
+      <LiveTracking/>
 
       <div className="z-10 flex flex-col h-screen absolute top-0 w-full justify-end">
         <div className="relative bg-white h-[30%] flex flex-col gap-4 p-5">
