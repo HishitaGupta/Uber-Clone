@@ -1,16 +1,26 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FinishRide from '../components/FinishRide'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-// import LiveTracking from '../components/LiveTracking'
+import { CaptainDataContext } from '../context/CaptainContext'
+import LiveTracking from '../components/LiveTracking'
 
 const CaptainRiding = () => {
 
     const [ finishRidePanel, setFinishRidePanel ] = useState(false)
     const finishRidePanelRef = useRef(null)
     const location = useLocation()
-    const rideData = location.state?.ride
+    const {contextRide} = useContext(CaptainDataContext)
+
+
+
+    
+
+    useEffect(() => {
+     console.log("ContextRidein captain:",contextRide)
+    }, [])
+    
 
 
 
@@ -50,12 +60,12 @@ const CaptainRiding = () => {
             </div>
             <div ref={finishRidePanelRef} className='fixed w-full z-[500] bottom-0 translate-y-full bg-white px-3 py-10 pt-12'>
                 <FinishRide
-                    ride={rideData}
+                    ride={contextRide}
                     setFinishRidePanel={setFinishRidePanel} />
             </div>
 
             <div className='h-screen fixed w-screen top-0 z-[-1]'>
-                {/* <LiveTracking /> */}
+                <LiveTracking />
             </div>
 
         </div>

@@ -1,6 +1,35 @@
+import axios from 'axios';
 import React from 'react';
+import {useNavigate} from 'react-router-dom'
 
 const FinishRide = (props) => {
+    const navigate=useNavigate()
+
+
+    async function endRide() {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/rides/end-ride`, 
+            {
+                rideId: props.ride._id,
+            }, 
+            {
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+
+            if(response.status === 200){
+                navigate("/captain-home")
+                console.log(response.data)
+            }
+            console.log("from ride ended:", response)
+        } catch (error) {
+            console.error("Error ending ride:", error)
+        }
+    }
+
+
+
     return (
         <div>
             <h5 
@@ -17,7 +46,7 @@ const FinishRide = (props) => {
                         src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" 
                         alt="User Avatar" 
                     />
-                    <h2 className="text-lg font-medium">{props.ride?.user.fullname.firstname}</h2>
+                    <h2 className="text-lg font-medium">{props.ride?.userId.fullname.firstname}</h2>
                 </div>
                 <h5 className="text-lg font-semibold">2.2 KM</h5>
             </div>
@@ -49,6 +78,7 @@ const FinishRide = (props) => {
                 <div className="mt-10 w-full">
                     <button 
                         className="w-full mt-5 flex text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg"
+                        onClick={endRide}
                     >
                         Finish Ride
                     </button>

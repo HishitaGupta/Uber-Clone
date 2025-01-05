@@ -8,6 +8,7 @@ import gsap from 'gsap'
 import { FiLogOut } from "react-icons/fi";
 import { CaptainDataContext } from '../context/CaptainContext'
 import { SocketContext } from '../context/SocketContext'
+import axios from 'axios'
 
 const CaptainHome = () => {
     const [ridePopupPanel, setRidePopupPanel] = useState(false)
@@ -18,7 +19,7 @@ const CaptainHome = () => {
     const [ride, setRide] = useState(null)
 
     const { socket,sendMessage,receiveMessage } = React.useContext(SocketContext)
-    const { captain } = React.useContext(CaptainDataContext)
+    const { captain} = React.useContext(CaptainDataContext)
 
     useEffect(()=>{
         console.log("IN home",captain);
@@ -56,9 +57,9 @@ const CaptainHome = () => {
     //     }
     //   }, [socket, receiveMessage]);
     
-    //   const onSubmitHandler = (e) => {
-    //     e.preventDefault();
-    //   };
+      const onSubmitHandler = (e) => {
+        e.preventDefault();
+      };
 
     useEffect(() => {
         if (socket) {
@@ -70,6 +71,20 @@ const CaptainHome = () => {
           });
         }
       }, [socket, receiveMessage])
+
+      async function confirmRide(){
+        
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/rides/confirm`,{
+            rideId:ride._id,
+            captainId:captain._id,
+
+            
+        },{
+            headers:{
+                Authorization:`Bearer ${localStorage.getItem('token')}`
+            }
+        })
+      }
 
 
     
@@ -118,6 +133,7 @@ const CaptainHome = () => {
                     ride={ride}
                     setRidePopupPanel={setRidePopupPanel}
                     setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+                    confirmRide={confirmRide}
                 />
             </div>
             <div ref={confirmRidePopupPanelRef} className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12">

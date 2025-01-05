@@ -1,9 +1,32 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FaHome } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import { UserDataContext } from '../context/UserContext'
+import { SocketContext } from '../context/SocketContext'
 
 const Riding = () => {
     const navigate = useNavigate()
+    const {contextRide}=useContext(UserDataContext)
+    const {socket,receiveMessage}=useContext(SocketContext)
+
+    useEffect(() => {
+              if (socket) {
+                console.log("Setting up socket listener for ride-ended event");
+                receiveMessage("ride-ended",( ride) => {
+                  console.log("Ride ended:", ride);
+                  navigate("/home")
+                  
+                  // setWaitingForDriver(true)
+                  // setRide(ride)
+                  
+                });
+              }
+            }, [socket, receiveMessage])
+
+
+
+
+
     return (
         <div className='h-screen'>
             <div className='w-10 h-10 bg-white rounded-full text-black text-lg fixed right-3 flex items-center justify-center mt-2'>
@@ -23,9 +46,9 @@ const Riding = () => {
                 </div>
 
                 <div className='flex flex-col justify-center px-2'>
-                    <h4 className="text-md flex justify-between text-gray-800">Ramesh </h4>
-                    <h1 className='text-2xl font-semibold'>PB11BX3361</h1>
-                    <h5 className="text-sm text-gray-600 flex justify-between">White Espresso 500</h5>
+                <h4 className="text-md flex justify-between text-gray-800">{`${contextRide?.captain?.fullname.firstname}`}</h4>
+                    <h1 className='text-2xl font-semibold'>{`${contextRide?.captain?.vehicle.plate}`}</h1>
+                    <h5 className="text-sm text-gray-600 flex justify-between">{`${contextRide?.captain?.vehicle.color}`+` `+`${contextRide?.captain?.vehicle.vehicleType}`}</h5>
 
                 </div>
             </div>
@@ -40,7 +63,7 @@ const Riding = () => {
                 <div className="flex flex-col p-2 w-full gap-1">
 
                     <h4 className="text-lg font-bold flex justify-between">Destination </h4>
-                    <p className='text-sm text-gray-400'>Destination</p>
+                    <p className='text-sm text-gray-400'>{contextRide?.destination}</p>
                     <hr />
 
                 </div>
@@ -48,12 +71,12 @@ const Riding = () => {
                 <div className="flex flex-col p-2 w-full gap-1">
 
                     <h4 className="text-lg font-bold flex justify-between">Payment </h4>
-                    <p className='text-sm text-gray-400'>Payment Mode</p>
+                    <p className='text-sm text-gray-400'>{contextRide?.fare}</p>
 
 
                 </div>
 
-                {/* <button className='w-full px-8 py-2 bg-black text-white font-semibold text-md rounded-lg m'>Confirm Ride</button>
+                {/* <button className='w-full px-8 py-2 bg-black text-white font-semibold text-md rounded-lg m'>Confirm contextRide</button>
            */}
 
             </div>

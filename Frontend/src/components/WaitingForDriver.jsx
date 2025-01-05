@@ -2,7 +2,7 @@ import React from 'react'
 import { FaUser } from 'react-icons/fa'
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 
-const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver }) => {
+const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver,ride }) => {
     return (
         <div>
             <div className='flex justify-between'>
@@ -26,9 +26,10 @@ const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver }) => {
                 </div>
 
                 <div className='flex flex-col justify-center px-2'>
-                    <h4 className="text-md flex justify-between text-gray-800">Ramesh </h4>
-                    <h1 className='text-2xl font-semibold'>PB11BX3361</h1>
-                    <h5 className="text-sm text-gray-600 flex justify-between">White Espresso 500</h5>
+                    <h4 className="text-md flex justify-between text-gray-800">{`${ride?.captain?.fullname.firstname}`}</h4>
+                    <h1 className='text-2xl font-semibold'>{`${ride?.captain?.vehicle.plate}`}</h1>
+                    <h5 className="text-sm text-gray-600 flex justify-between">{`${ride?.captain?.vehicle.color}`+` `+`${ride?.captain?.vehicle.vehicleType}`}</h5>
+                    <h1>{ride?.otp}</h1>
 
                 </div>
             </div>
@@ -41,7 +42,7 @@ const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver }) => {
                 <div className="flex flex-col p-2 w-full gap-2">
 
                     <h4 className="text-xl font-bold flex justify-between">Location </h4>
-                    <p className='text-md text-gray-400'>location</p>
+                    <p className='text-md text-gray-400'>{ride?.pickup}</p>
                     <hr />
 
                 </div>
@@ -49,7 +50,7 @@ const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver }) => {
                 <div className="flex flex-col p-2 w-full gap-2">
 
                     <h4 className="text-xl font-bold flex justify-between">Destination </h4>
-                    <p className='text-md text-gray-400'>Destination</p>
+                    <p className='text-md text-gray-400'>{ride?.destination}</p>
                     <hr />
 
                 </div>
@@ -57,7 +58,7 @@ const WaitingForDriver = ({ waitingForDriver, setWaitingForDriver }) => {
                 <div className="flex flex-col p-2 w-full gap-2">
 
                     <h4 className="text-xl font-bold flex justify-between">Payment </h4>
-                    <p className='text-md text-gray-400'>Payment Mode</p>
+                    <p className='text-md text-gray-400'>{ride?.fare}</p>
 
 
                 </div>

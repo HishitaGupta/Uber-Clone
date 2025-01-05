@@ -9,6 +9,7 @@ import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import { UserDataContext } from "../context/UserContext";
 import {SocketContext} from "../context/SocketContext";
+import { useNavigate } from "react-router";
 
 const Home = () => {
 
@@ -33,11 +34,13 @@ const Home = () => {
   const [destinationActive,setDestinationActive]=React.useState(false);
   const[fare,setFare]=React.useState(0);
   const[selectedVehicle,setSelectedVehicle]=React.useState(null);
+  const[ride,setRide]=React.useState(null);
+  const navigate = useNavigate();
 
 
 
-  const { user } = React.useContext(UserDataContext);
-  const {sendMessage}=React.useContext(SocketContext);
+  const { user,contextRide, setContextRide } = React.useContext(UserDataContext);
+  const {sendMessage,socket,receiveMessage}=React.useContext(SocketContext);
 
 
   useEffect(()=>{
@@ -109,10 +112,6 @@ const Home = () => {
   React.useEffect(() => {
     if (lookingForDriver) {
       gsap.to(lookingForDriverRef.current, { transform: "translateY(0)", duration: 0.3 });
-      setTimeout(() => {
-        setWaitingForDriver(true);
-        setLookingForDriver(false);
-      }, 3000);
     } else {
       gsap.to(lookingForDriverRef.current, { transform: "translateY(100%)", duration: 0.3 });
     }
@@ -141,6 +140,38 @@ const Home = () => {
     }).catch((error) => {
       console.error("Error creating ride:", error)});
     }
+
+    // socket.on("ride-confirmed",ride=>{
+      
+    // })
+
+   useEffect(() => {
+          if (socket) {
+            console.log("Setting up socket listener for ride-confirmed event");
+            receiveMessage("ride-confirmed",( ride) => {
+              console.log("Ride confirmed:", ride);
+              setWaitingForDriver(true)
+              setRide(ride)
+              
+            });
+          }
+        }, [socket, receiveMessage])
+
+
+        useEffect(() => {
+          if (socket) {
+            console.log("Setting up socket listener for ride-started event");
+            receiveMessage("ride-started",( ride) => {
+              console.log("Ride started:", ride);
+              setContextRide(ride)
+              navigate("/riding")
+              
+              // setWaitingForDriver(true)
+              // setRide(ride)
+              
+            });
+          }
+        }, [socket, receiveMessage])
 
   return (
     <div className="relative flex flex-col h-screen justify-between overflow-hidden">
@@ -249,7 +280,7 @@ const Home = () => {
       <div
         className="w-full fixed z-10 bottom-0 bg-white flex flex-col gap-4 p-4 translate-y-full" ref={waitingForDriverRef}
       >
-        <WaitingForDriver waitingForDriver={waitingForDriver} setWaitingForDriver={setWaitingForDriver} />
+        <WaitingForDriver waitingForDriver={waitingForDriver} setWaitingForDriver={setWaitingForDriver} ride={ride} />
       </div>
     </div>
   );

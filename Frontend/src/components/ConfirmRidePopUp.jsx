@@ -1,8 +1,50 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router'
-
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
+import { CaptainDataContext } from '../context/CaptainContext';
 const ConfirmRidePopUp = (props) => {
     const [otp, setOtp] = useState('')
+    const navigate=useNavigate()
+    const {contextRide,setContextRide}=useContext(CaptainDataContext)
+
+    const submitHandler = async (e) => {
+        e.preventDefault()
+
+
+
+
+
+
+
+        
+
+
+
+
+    }
+
+    
+
+    async function startRide() {
+
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/rides/start-ride`, {
+            params: {
+                rideId: props.ride._id,
+                otp: otp
+            },
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+
+        if(response.status === 200){
+            navigate("/captain-riding")
+            setContextRide(response.data)
+            console.log(response.data)
+        }
+        console.log("from ride started:", response)
+    }
 
     return (
         <div>
@@ -19,7 +61,7 @@ const ConfirmRidePopUp = (props) => {
                         src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg"
                         alt=""
                     />
-                    {/* <h2 className='text-lg font-medium capitalize'>{props.ride?.user.fullname.firstname}</h2> */}
+                    <h2 className='text-lg font-medium capitalize'>{props.ride?.userId.fullname.firstname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.2 KM</h5>
             </div>
@@ -49,7 +91,7 @@ const ConfirmRidePopUp = (props) => {
                 </div>
 
                 <div className='mt-6 w-full'>
-                    <form>
+                    <form onSubmit={(e) => submitHandler(e)}>
                         <input
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
@@ -58,12 +100,12 @@ const ConfirmRidePopUp = (props) => {
                             placeholder='Enter OTP'
                         />
 
-                        <Link
-                        to="/captain-riding"
-                            type="button"
-                            className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>
+                        <button
+                            // to="/captain-riding"
+                            type="submit"
+                            className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg' onClick={startRide}>
                             Confirm
-                        </Link>
+                        </button>
                         <button
                             type="button"
                             onClick={() => {

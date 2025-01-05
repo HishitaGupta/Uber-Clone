@@ -7,6 +7,7 @@ const CaptainContext = ({children}) => {
     const [captain, setCaptain] = useState({})
     const [isLoading, setIsLoading] = useState({})
     const [error, setError] = useState({})
+    const [contextRide,setContextRide]=useState({})
     
     const updateCaptain =(captainData)=>{
         setCaptain(captainData)
@@ -19,7 +20,8 @@ const CaptainContext = ({children}) => {
         setIsLoading,
         error,
         setError,
-        updateCaptain
+        updateCaptain,
+        contextRide,setContextRide
     }
 
 
